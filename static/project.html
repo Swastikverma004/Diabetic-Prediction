@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiabetesRisk Check</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #008080;
+            --secondary: #F5F5F5;
+            --accent: #FF6B6B;
+            --text: #333333;
+            --light-text: #777777;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text);
+            background-color: var(--secondary);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), #006666);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .prediction-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 800px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,128,128,0.2);
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        button:hover {
+            background-color: #006666;
+            transform: translateY(-2px);
+        }
+        
+        .result-container {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .positive {
+            background-color: #FFEEEE;
+            border-left: 5px solid var(--accent);
+        }
+        
+        .negative {
+            background-color: #E8F5E9;
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .result-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .visualization {
+            margin: 40px 0;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--light-text);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>DiabetesRisk Check</h1>
+            <p class="subtitle">Predict your diabetes risk in seconds using our advanced machine learning model</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="prediction-card">
+            <h2>Enter Your Health Information</h2>
+            <form id="diabetesForm">
+                <div class="form-group">
+                    <label for="pregnancies">Number of Pregnancies:</label>
+                    <input type="number" id="pregnancies" min="0" max="20" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="glucose">Glucose Level (mg/dL):</label>
+                    <input type="number" id="glucose" min="0" max="300" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bloodPressure">Blood Pressure (mm Hg):</label>
+                    <input type="number" id="bloodPressure" min="0" max="150" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="skinThickness">Skin Thickness (mm):</label>
+                    <input type="number" id="skinThickness" min="0" max="100" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="insulin">Insulin Level (μU/mL):</label>
+                    <input type="number" id="insulin" min="0" max="300" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bmi">BMI (kg/m²):</label>
+                    <input type="number" id="bmi" min="0" max="70" step="0.1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dpf">Diabetes Pedigree Function:</label>
+                    <input type="number" id="dpf" min="0" max="3" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="age">Age (years):</label>
+                    <input type="number" id="age" min="0" max="120" required>
+                </div>
+                
+                <button type="submit">Check My Risk</button>
+            </form>
+            
+            <div id="resultContainer" class="result-container">
+                <div id="resultIcon" class="result-icon"></div>
+                <h2 id="resultTitle"></h2>
+                <p id="resultText"></p>
+                <p id="confidenceText"></p>
+                <div id="recommendations"></div>
+            </div>
+        </div>
+        
+        <div class="visualization">
+            <h2>How Your Values Compare</h2>
+            <div id="comparisonChart"></div>
+        </div>
+        
+        <div class="visualization">
+            <h2>Model Performance</h2>
+            <div id="performanceChart"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Disclaimer: This tool is not a substitute for professional medical advice. Always consult with a healthcare provider.</p>
+        <p>© 2023 DiabetesRisk Check. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('diabetesForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const formData = {
+                pregnancies: document.getElementById('pregnancies').value,
+                glucose: document.getElementById('glucose').value,
+                bloodPressure: document.getElementById('bloodPressure').value,
+                skinThickness: document.getElementById('skinThickness').value,
+                insulin: document.getElementById('insulin').value,
+                bmi: document.getElementById('bmi').value,
+                dpf: document.getElementById('dpf').value,
+                age: document.getElementById('age').value
+            };
+            
+            // Send to backend (you'll need to implement this)
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display results
+                const resultContainer = document.getElementById('resultContainer');
+                const resultIcon = document.getElementById('resultIcon');
+                const resultTitle = document.getElementById('resultTitle');
+                const resultText = document.getElementById('resultText');
+                const confidenceText = document.getElementById('confidenceText');
+                const recommendations = document.getElementById('recommendations');
+                
+                resultContainer.style.display = 'block';
+                
+                if (data.prediction === 1) {
+                    resultContainer.className = 'result-container positive';
+                    resultIcon.innerHTML = '⚠️';
+                    resultTitle.textContent = 'Higher Risk of Diabetes';
+                    resultText.textContent = 'Our model predicts you may be at risk for diabetes based on your health metrics.';
+                    recommendations.innerHTML = `
+                        <h3>Recommendations:</h3>
+                        <ul>
+                            <li>Consult with a healthcare professional</li>
+                            <li>Monitor your blood sugar levels regularly</li>
+                            <li>Maintain a balanced diet and regular exercise</li>
+                            <li>Reduce intake of processed sugars</li>
+                        </ul>
+                    `;
+                } else {
+                    resultContainer.className = 'result-container negative';
+                    resultIcon.innerHTML = '✓';
+                    resultTitle.textContent = 'Lower Risk of Diabetes';
+                    resultText.textContent = 'Our model predicts you have a lower risk of diabetes based on your health metrics.';
+                    recommendations.innerHTML = `
+                        <h3>Recommendations:</h3>
+                        <ul>
+                            <li>Continue maintaining healthy habits</li>
+                            <li>Get regular health checkups</li>
+                            <li>Stay physically active</li>
+                            <li>Eat a balanced diet</li>
+                        </ul>
+                    `;
+                }
+                
+                confidenceText.textContent = `Confidence: ${(data.confidence * 100).toFixed(1)}%`;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            });
+        });
+    </script>
+</body>
+</html>
